@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать доставку</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container my-5">
+  <h1>Редактировать доставку</h1>
+  <form th:action="@{/delivery-orders/edit/{id}(id=${deliveryOrderModel.id})}" th:object="${deliveryOrderModel}" method="post">
+
+    <div class="form-group">
+      <label for="customer">Клиент:</label>
+      <select id="customer" class="form-control" name="customer.id" th:field="*{customer.id}" onchange="fetchOrdersByCustomer(this.value)">
+        <option th:value="${deliveryOrderModel.customer.id}"
+                th:text="${deliveryOrderModel.customer.firstName + ' ' + deliveryOrderModel.customer.lastName}"
+                th:selected="true"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="order">Заказ:</label>
+      <select id="order" th:field="*{order.id}" class="form-control" required>
+        <option value="">Выберите заказ</option>
+        <option th:each="order : ${orders}"
+                th:value="${order.id}"
+                th:text="${order.id + ' - ' + order.productsList}"
+                th:selected="${order.id == deliveryOrderModel.order.id}"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="orderDate">Дата доставки:</label>
+      <input type="date" id="orderDate" th:field="*{orderDate}" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Статус:</label>
+      <input type="text" id="status" th:field="*{status}" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+</div>
+
+<script>
+  function fetchOrdersByCustomer(customerId) {
+      let ordersSelect = $('#order');
+      ordersSelect.empty().append('<option value="">Выберите заказ</option>');
+
+      if (customerId) {
+          $.getJSON('/delivery-orders/orders/' + customerId, function(data) {
+              $.each(data, function(index, order) {
+                  ordersSelect.append('<option value="' + order.id + '">' + order.id + ' - ' + order.productsList + '</option>');
+              });
+          }).fail(function() {
+              console.error("Ошибка получения данных заказов.");
+          });
+      }
+  }
+
+  $(document).ready(function() {
+      const customerId = $('#customer').val();
+      fetchOrdersByCustomer(customerId);
+  });
+</script>
+
+</body>
+</html>

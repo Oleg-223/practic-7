@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать поставку</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-5">
+  <h1>Редактировать поставку</h1>
+  <form th:action="@{/deliveries/edit/{id}(id=${deliveryModel.id})}" th:object="${deliveryModel}" method="post">
+    <div class="form-group">
+      <label for="deliveryDate">Дата доставки</label>
+      <input type="date" id="deliveryDate" th:field="*{deliveryDate}" class="form-control" required/>
+    </div>
+
+    <div class="form-group">
+      <label for="supplier">Поставщик</label>
+      <select id="supplier" th:field="*{supplier.id}" class="form-control" required>
+        <option th:each="supplier : ${suppliers}"
+                th:value="${supplier.id}"
+                th:text="${supplier.name}"></option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="products">Товары</label>
+      <select id="products" name="productIds" class="form-control" multiple required>
+        <option th:each="product : ${products}"
+                th:value="${product.id}"
+                th:text="${product.name}"></option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+</div>
+</body>
+</html>

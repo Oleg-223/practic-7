@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+        .jumbotron {
+            background-color: #f8f9fa;
+        }
+        .nav-link {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">Главная</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+    <form action="/logout" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-danger">Выйти</button>
+    </form>
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Добро пожаловать!</h1>
+        <p class="lead">Главная Страница Информационной Системы Склада</p>
+    </div>
+    <nav class="nav nav-pills nav-fill">
+<!--        -->
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_WAREHOUSE_WORKER'')')}" th:href="@{/colors}">Цвета</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_WAREHOUSE_WORKER'')')}" th:href="@{/suppliers}">Поставщики</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_WAREHOUSE_WORKER'')')}" th:href="@{/deliveries}">Поставки</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_WAREHOUSE_WORKER'')')}" th:href="@{/products}">Товары</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_WAREHOUSE_WORKER'')')}" th:href="@{/product-placements}">Размещение товаров</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_WAREHOUSE_WORKER'')')}" th:href="@{/storage-cells}">Ячейки хранения</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_SELLER'')')}" th:href="@{/customers}">Клиенты</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_SELLER'')')}" th:href="@{/order-products}">Товары для Заказа</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_SELLER'')')}" th:href="@{/orders}">Заказы</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_SELLER'')')}" th:href="@{/delivery-orders}">Доставка</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{/users}">Пользователи</a>
+        <a class="nav-item nav-link" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{/backups}">Резервные копии</a>
+    </nav>
+</div>
+</body>
+</html>

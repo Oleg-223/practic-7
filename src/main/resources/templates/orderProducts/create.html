@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Создать продукт заказа</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-5">
+  <h1>Создать продукт заказа</h1>
+  <form th:action="@{/order-products/create}" th:object="${orderProductModel}" method="post">
+    <div class="form-group">
+      <label for="products">Продукт:</label>
+      <select id="products" th:field="*{product}" class="form-control">
+        <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="quantity">Количество:</label>
+      <input type="number" id="quantity" th:field="*{quantity}" class="form-control" min="1">
+      <div th:if="${#fields.hasErrors('quantity')}" class="alert alert-danger" th:utext="${#fields.errors('quantity')}"></div>
+    </div>
+    <button type="submit" class="btn btn-primary">Создать</button>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать продукт заказа</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-5">
+  <h1>Редактировать продукт заказа</h1>
+  <form th:action="@{/order-products/edit/{id}(id=${orderProductModel.id})}" th:object="${orderProductModel}" method="post">
+    <div class="form-group">
+      <label for="products">Продукт:</label>
+      <select id="products" th:field="*{product}" class="form-control">
+        <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"
+                th:selected="${product.id == orderProductModel.product.id}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="quantity">Количество:</label>
+      <input type="number" id="quantity" th:field="*{quantity}" class="form-control" min="1">
+      <div th:if="${#fields.hasErrors('quantity')}" class="alert alert-danger" th:utext="${#fields.errors('quantity')}"></div>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+</div>
+</body>
+</html>

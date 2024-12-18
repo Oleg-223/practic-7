@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать доставку</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="container my-5">
+    <h1>Создать доставку</h1>
+    <form th:action="@{/delivery-orders/create}" th:object="${deliveryOrderModel}" method="post">
+        <div class="form-group">
+            <label for="customer">Клиент:</label>
+            <select id="customer" class="form-control" name="customer.id" onchange="fetchOrdersByCustomer(this.value)" required>
+                <option value="">Выберите клиента</option>
+                <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.firstName + ' ' + customer.lastName}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="order">Заказ:</label>
+            <select id="order" th:field="*{order}" class="form-control" required>
+                <option value="">Выберите заказ</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="orderDate">Дата доставки:</label>
+            <input type="date" id="orderDate" th:field="*{orderDate}" class="form-control" min="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Статус:</label>
+            <input type="text" id="status" th:field="*{status}" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+</div>
+
+<script>
+    function fetchOrdersByCustomer(customerId) {
+        let ordersSelect = $('#order');
+        ordersSelect.empty().append('<option value="">Выберите заказ</option>');
+
+        if (customerId) {
+            console.log("Запрашиваем заказы для клиента с ID: " + customerId);
+            $.getJSON('/delivery-orders/orders/' + customerId, function(data) {
+                console.log(data);
+                if (data.length === 0) {
+                    console.log("Заказы не найдены для клиента " + customerId);
+                }
+                $.each(data, function(index, order) {
+                    ordersSelect.append('<option value="' + order.id + '">' + order.id + ' - ' + order.productsList + '</option>');
+                });
+            }).fail(function() {
+                console.error("Ошибка получения данных заказов.");
+            });
+        }
+    }
+</script>
+
+</body>
+</html>

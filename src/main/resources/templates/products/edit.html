@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактировать Товар</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-5">
+  <h1>Редактировать Товар</h1>
+  <form th:action="@{/products/edit/{id}(id=${productModel.id})}" th:object="${productModel}" method="post">
+    <div class="form-group">
+      <label for="name">Название</label>
+      <input type="text" class="form-control" id="name" th:field="*{name}" required>
+      <div th:if="${#fields.hasErrors('name')}" class="alert alert-danger" th:utext="${#fields.errors('name')}"></div>
+    </div>
+    <div class="form-group">
+      <label for="description">Описание</label>
+      <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+      <div th:if="${#fields.hasErrors('description')}" class="alert alert-danger" th:utext="${#fields.errors('description')}"></div>
+    </div>
+    <div class="form-group">
+      <label for="price">Цена</label>
+      <input type="number" class="form-control" id="price" th:field="*{price}" step="0.01" required>
+      <div th:if="${#fields.hasErrors('price')}" class="alert alert-danger" th:utext="${#fields.errors('price')}"></div>
+    </div>
+    <div class="form-group">
+      <label for="color">Цвет</label>
+      <select class="form-control" id="color" th:field="*{color}" required>
+        <option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.colorName}"></option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+</div>
+</body>
+</html>

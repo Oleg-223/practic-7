@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактирование поставщика</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4">Редактирование поставщика</h1>
+  <form th:action="@{/suppliers/edit/{id}(id=${supplier.id})}" th:object="${supplier}" method="post">
+    <div class="form-group">
+      <label for="name">Название:</label>
+      <input type="text" id="name" th:field="*{name}" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="contactInfo">Контактная информация:</label>
+      <input type="text" id="contactInfo" th:field="*{contactInfo}" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="address">Адрес:</label>
+      <input type="text" id="address" th:field="*{address}" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Обновить</button>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+name: Validate code and check for syntax errors
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Download Checkstyle
+        run: |
+          curl -L -o checkstyle.jar https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar
+
+      - name: Create Checkstyle configuration
+        run: |
+          echo "<module name=\"Checker\">
+                    <module name=\"TreeWalker\">
+                      <module name=\"FileTabCharacter\" />
+                      <module name=\"WhitespaceAround\" />
+                      <module name=\"LineLength\">
+                        <property name=\"max\" value=\"100\" />
+                      </module>
+                      <module name=\"JavadocType\" />
+                      <module name=\"JavadocMethod\" />
+                      <module name=\"MissingJavadocType\" />
+                      <module name=\"MissingJavadocMethod\" />
+                      <module name=\"ValidEmptyLine\"/>
+                    </module>
+                  </module>" > checkstyle.xml
+
+      - name: Run Checkstyle
+        run: |
+          java -jar checkstyle.jar -c checkstyle.xml src/**/*.java || true
+
+      - name: Download SpotBugs
+        run: |
+          curl -L -o spotbugs.jar https://github.com/spotbugs/spotbugs/releases/download/spotbugs-4.5.0/spotbugs-4.5.0.zip
+          unzip spotbugs.zip -d spotbugs && rm spotbugs.zip
+
+      - name: Run SpotBugs
+        run: |
+          java -jar spotbugs/lib/spotbugs.jar -textui -effort:max -output report.txt target/classes || true
+          cat report.txt
+

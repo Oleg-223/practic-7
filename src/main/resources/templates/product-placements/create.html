@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Создание размещения товара</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-5">
+  <h1>Создание размещения товара</h1>
+  <form th:action="@{/product-placements/create}" th:object="${productPlacementModel}" method="post">
+    <div class="form-group">
+      <label for="product">Товар:</label>
+      <select id="product" th:field="*{product}" class="form-control">
+        <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="storageCell">Ячейка хранения:</label>
+      <select id="storageCell" th:field="*{storageCell}" class="form-control">
+        <option th:each="storageCell : ${storageCells}" th:value="${storageCell.id}" th:text="${storageCell.cellNumber} + ' - ' + ${storageCell.location}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="quantity">Количество:</label>
+      <input type="number" id="quantity" th:field="*{quantity}" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Создать</button>
+  </form>
+</div>
+</body>
+</html>

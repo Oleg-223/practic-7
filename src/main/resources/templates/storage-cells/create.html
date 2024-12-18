@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Создание ячейки хранения</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-5">
+  <h1>Создание ячейки хранения</h1>
+  <form th:action="@{/storage-cells/create}" th:object="${storageCell}" method="post">
+    <div class="form-group">
+      <label for="cellNumber">Номер ячейки:</label>
+      <input type="number" class="form-control" id="cellNumber" th:field="*{cellNumber}" required>
+    </div>
+    <div class="form-group">
+      <label for="location">Расположение:</label>
+      <input type="text" class="form-control" id="location" th:field="*{location}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Создать</button>
+  </form>
+</div>
+</body>
+</html>

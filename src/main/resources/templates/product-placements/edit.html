@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактирование размещенного товара</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container my-5">
+  <h1>Редактирование размещенного товара</h1>
+  <form th:action="@{/product-placements/edit/{id}(id=${productPlacementModel.id})}" th:object="${productPlacementModel}" method="post">
+    <div class="form-group">
+      <label for="product">Товар:</label>
+      <select class="form-control" id="product" th:field="*{product}">
+        <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="storageCell">Ячейка хранения:</label>
+      <select class="form-control" id="storageCell" th:field="*{storageCell}">
+        <option th:each="storageCell : ${storageCells}" th:value="${storageCell.id}" th:text="${storageCell.cellNumber} + ' - ' + ${storageCell.location}"></option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="quantity">Количество:</label>
+      <input type="number" class="form-control" id="quantity" th:field="*{quantity}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Обновить</button>
+  </form>
+</div>
+</body>
+</html>
