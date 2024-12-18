@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module name="Checker">
+    <module name="TreeWalker">
+        <module name="WhitespaceAround">
+            <property name="tokens" value="ASSIGN, PLUS, MINUS, STAR, SLASH, BITWISE_AND, BITWISE_OR, BITWISE_XOR,
+                        EQUAL, NOT_EQUAL, LESS, LESS_EQUAL, GREATER, GREATER_EQUAL,
+                        LITERAL_INSTANCEOF" />
+        </module>
+        <module name="LineLength">
+            <property name="max" value="120"/>
+        </module>
+        <module name="MethodLength">
+            <property name="max" value="20"/>
+        </module>
+        <module name="FileTabCharacter">
+            <property name="allowInline" value="true"/>
+        </module>
+        <module name="AvoidStarImport"/>
+        <module name="MissingJavadocType"/>
+        <module name="MissingJavadocMethod"/>
+        <module name="JavadocType"/>
+        <module name="JavadocVariable"/>
+        <module name="SingleLineThirdIndentation"/>
+    </module>
+</module>
