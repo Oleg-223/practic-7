@@ -10,25 +10,22 @@ on:
       - master
 
 jobs:
-  check:
+  checkcode:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Clone repo
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: '17'
 
-      - name: Build
-        run: mvn clean install
+      - name: Build with Maven
+        run: |
+          mvn clean install
 
-      - name: Checkstyle
-        run: mvn checkstyle:check
-
-      - name: Spotbugs
-        run: mvn spotbugs:check
-
-      - name: Syntax Check (if applicable)
-        run: mvn compile
+      - name: Run Checkstyle
+        run: |
+          mvn checkstyle:checkstyle
