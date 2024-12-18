@@ -28,6 +28,11 @@ jobs:
       - name: Install Checkstyle
         run: |
           curl -O https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.5/checkstyle-10.5-all.jar
+          # Проверка, что файл был загружен успешно
+          if [ ! -f checkstyle-10.5-all.jar ]; then
+            echo "Checkstyle JAR file not found!"
+            exit 1
+          fi
 
       - name: Run Checkstyle
         run: |
