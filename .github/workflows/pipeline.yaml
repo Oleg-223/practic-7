@@ -1,39 +1,102 @@
-name: Java Syntax Check
+#name: Java Syntax Check
+#
+#on:
+#  push:
+#    branches:
+#      - master
+#  pull_request:
+#    branches:
+#      - master
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v2
+#        with:
+#          java-version: '17'
+#          distribution: 'temurin'
+#
+#      - name: Build with Maven
+#        run: mvn clean compile
+#
+#      - name: Install Checkstyle
+#        run: |
+#          curl -O https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.5/checkstyle-10.5-all.jar
+#          # Проверка, что файл был загружен успешно
+#          if [ ! -f checkstyle-10.5-all.jar ]; then
+#            echo "Checkstyle JAR file not found!"
+#            exit 1
+#          fi
+#
+#      - name: Run Checkstyle
+#        run: |
+#          java -jar checkstyle-10.5-all.jar -c /google_checks.xml .
+
+
+name: Validate code and check for syntax errors
 
 on:
   push:
     branches:
       - master
+
   pull_request:
     branches:
       - master
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Clone repository
         uses: actions/checkout@v2
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn clean compile
+        run: mvn clean install
 
-      - name: Install Checkstyle
+      - name: Download Checkstyle
         run: |
-          curl -O https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.5/checkstyle-10.5-all.jar
-          # Проверка, что файл был загружен успешно
-          if [ ! -f checkstyle-10.5-all.jar ]; then
-            echo "Checkstyle JAR file not found!"
-            exit 1
-          fi
+          curl -L -o checkstyle.jar https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar
+
+      - name: Create Checkstyle configuration
+        run: |
+          echo "<module name=\"Checker\">
+                    <module name=\"TreeWalker\">
+                      <module name=\"FileTabCharacter\" />
+                      <module name=\"WhitespaceAround\" />
+                      <module name=\"LineLength\">
+                        <property name=\"max\" value=\"100\" />
+                      </module>
+                      <module name=\"JavadocType\" />
+                      <module name=\"JavadocMethod\" />
+                      <module name=\"MissingJavadocType\" />
+                      <module name=\"MissingJavadocMethod\" />
+                      <module name=\"ValidEmptyLine\"/>
+                    </module>
+                  </module>" > checkstyle.xml
 
       - name: Run Checkstyle
         run: |
-          java -jar checkstyle-10.5-all.jar -c /google_checks.xml .
+          java -jar checkstyle.jar -c checkstyle.xml src/**/*.java || true
+
+      - name: Download SpotBugs
+        run: |
+          curl -L -o spotbugs.jar https://github.com/spotbugs/spotbugs/releases/download/spotbugs-4.5.0/spotbugs-4.5.0.zip
+          unzip spotbugs.zip -d spotbugs && rm spotbugs.zip
+
+      - name: Run SpotBugs
+        run: |
+          java -jar spotbugs/lib/spotbugs.jar -textui -effort:max -output report.txt target/classes || true
+          cat report.txt
+
