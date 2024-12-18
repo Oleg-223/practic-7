@@ -21,8 +21,14 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Build and check style
-        run: |
-          mvn clean install
-          mvn checkstyle:check
-          mvn spotbugs:check
+      - name: Build
+        run: mvn clean install
+
+      - name: Checkstyle
+        run: mvn checkstyle:check
+
+      - name: Spotbugs
+        run: mvn spotbugs:check
+
+      - name: Syntax Check (if applicable)
+        run: mvn compile
