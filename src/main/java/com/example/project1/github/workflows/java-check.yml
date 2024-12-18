@@ -24,10 +24,10 @@ jobs:
       - name: Build with Maven
         run: mvn clean compile
 
-      - name: Install dependencies
+      - name: Install Checkstyle
         run: |
-          pip install pycodestyle
+          curl -O https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.5/checkstyle-10.5-all.jar
 
-      - name: Run linter
+      - name: Run Checkstyle
         run: |
-          pycodestyle .  
+          java -jar checkstyle-10.5-all.jar -c /google_checks.xml .
