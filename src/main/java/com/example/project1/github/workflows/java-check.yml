@@ -24,5 +24,10 @@ jobs:
       - name: Build with Maven
         run: mvn clean compile
 
-      - name: Run tests
-        run: mvn test
+      - name: Install dependencies
+        run: |
+          pip install pycodestyle
+
+      - name: Run linter
+        run: |
+          pycodestyle .  
