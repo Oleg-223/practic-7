@@ -40,6 +40,17 @@ jobs:
             exit 1
           fi
 
+      - name: Check for Java files
+        id: check_files
+        run: |
+          FILES=$(find src -name '*.java')
+          echo "Found Java files: $FILES"
+          if [ -z "$FILES" ]; then
+            echo "No Java files found in src directory."
+            exit 1
+          fi
+          echo "::set-output name=files::$FILES"
+
       - name: Run Checkstyle
         run: |
-          java -jar checkstyle-10.4-all.jar -c /google_checks.xml
+          java -jar checkstyle-10.4-all.jar -c /google_checks.xml ${{ steps.check_files.outputs.files }}
