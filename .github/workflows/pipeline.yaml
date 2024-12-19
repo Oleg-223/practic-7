@@ -28,15 +28,9 @@ jobs:
       - name: Download Checkstyle
         run: |
           curl -L -o checkstyle-10.4-all.jar https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.4/checkstyle-10.4-all.jar
-          # Проверка, что файл был загружен успешно
+          # Проверка, что файл был загружен
           if [ ! -f checkstyle-10.4-all.jar ]; then
             echo "Checkstyle JAR file not found!"
-            exit 1
-          fi
-
-          # Проверка целостности JAR-файла
-          if ! java -jar checkstyle-10.4-all.jar -c /sun_checks.xml --help; then
-            echo "The JAR file seems to be corrupted or invalid."
             exit 1
           fi
 
@@ -53,4 +47,4 @@ jobs:
 
       - name: Run Checkstyle
         run: |
-          java -jar checkstyle-10.4-all.jar -c /google_checks.xml
+          java -jar checkstyle-10.4-all.jar -c google_checks.xml ${{ steps.check_files.outputs.files }}
