@@ -18,22 +18,10 @@ public class SecurityConfig {
 
     private final AppUserDetailsService appUserDetailsService;
 
-    /**
-     * Constructor for SecurityConfig.
-     *
-     * @param appUserDetailsService the user details service
-     */
     public SecurityConfig(AppUserDetailsService appUserDetailsService) {
         this.appUserDetailsService = appUserDetailsService;
     }
 
-    /**
-     * Defines the security filter chain for HTTP requests.
-     *
-     * @param http the HttpSecurity object
-     * @return the SecurityFilterChain
-     * @throws Exception if an error occurs
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -56,11 +44,6 @@ public class SecurityConfig {
                 .build();
     }
 
-    /**
-     * Authentication provider bean.
-     *
-     * @return the AuthenticationProvider instance
-     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -69,11 +52,6 @@ public class SecurityConfig {
         return provider;
     }
 
-    /**
-     * Password encoder bean.
-     *
-     * @return the PasswordEncoder instance
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
