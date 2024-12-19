@@ -53,4 +53,4 @@ jobs:
 
       - name: Run Checkstyle
         run: |
-          java -jar checkstyle-10.4-all.jar -c /google_checks.xml ${{ steps.check_files.outputs.files }}
+          java -jar checkstyle-10.4-all.jar -c /google_checks.xml
